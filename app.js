@@ -1,17 +1,19 @@
 const express = require('express');
+const setRoutes = require('./src/routes/taskRoutes');
+const errorHandler = require('./src/middlewares/errorHandler');
+
 const app = express();
-const port = 3000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+setRoutes(app);
+app.use(errorHandler);
 
-app.listen(port, (err) => {
-    if (err) {
-        return console.log('Something bad happened', err);
-    }
-    console.log(`Server is listening on ${port}`);
+// Start the server only if this file is run directly
+if (require.main === module) {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
-
-
-
+}
 module.exports = app;
